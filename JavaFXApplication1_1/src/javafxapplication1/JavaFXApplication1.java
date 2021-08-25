@@ -29,9 +29,11 @@ import javafx.stage.Stage;
  */
 public class JavaFXApplication1 extends Application {
     
-    
+    //Generates random number for user to guess.
     Random randomNumber = new Random();
     int number = randomNumber.nextInt(100);
+    
+    int counter = 0;
     
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
@@ -44,10 +46,10 @@ public class JavaFXApplication1 extends Application {
         Image img2 = new Image(new FileInputStream("Images\\down-arrow.png"));
         ImageView imgview = new ImageView(img1);
         ImageView imgview2 = new ImageView(img2);
+        Label lbl1 = new Label("");
+        Label count = new Label("Guesses: ");
         
         //Setting text for objects
-        Label lbl1 = new Label("");
-        Label lbl2 = new Label("");
         btn.setText("Guess");
         close.setText("Close");
         rnd.setText("Randomize");
@@ -85,6 +87,9 @@ public class JavaFXApplication1 extends Application {
                     responds accordingly.
                 */
                 try {
+                    
+                    counterUpdate(count);
+                    
                     if (Integer.parseInt(guess) == number)
                     {
                         lbl1.setText("Correct");
@@ -128,13 +133,16 @@ public class JavaFXApplication1 extends Application {
             public void handle(ActionEvent event) {
                 Randomize();
                 lbl1.setText("");
+                setImgVis(imgview, imgview2, false, false);
+                counter = -1;
+                counterUpdate(count);
             }
         });
         
         //Creates a group and assigns all the previously created objects as 
         //children to the group.
         Group root = new Group();
-        root.getChildren().addAll(txt, lbl1, lbl2, close, btn, rnd, 
+        root.getChildren().addAll(txt, lbl1, count, close, btn, rnd, 
                 imgview, imgview2);
         
         //Sets the location of each object added to the group.
@@ -148,6 +156,9 @@ public class JavaFXApplication1 extends Application {
         close.setLayoutY(200);
         rnd.setLayoutX(225);
         rnd.setLayoutY(10);
+        count.setLayoutX(125);
+        count.setLayoutY(10);
+        
         
         
         Scene scene = new Scene(root, 300, 250);
@@ -171,6 +182,14 @@ public class JavaFXApplication1 extends Application {
     {
         img1.setVisible(pick1);
         img2.setVisible(pick2);
+    }
+    
+    //Updates Guess counter
+    public void counterUpdate(Label lab)
+    {
+        counter++;
+        
+        lab.setText("Guesses: " + counter);
     }
     
     //Creates a new random number for the user to guess.
